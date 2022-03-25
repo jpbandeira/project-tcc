@@ -11,6 +11,8 @@ public class User {
 	private String email;
 	private String registration;
 	
+	public User() {}
+	
 	public User(UUID uuid, String name, TypeUser type, String email, String registration) {
 		super();
 		this.uuid = uuid;
