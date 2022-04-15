@@ -29,6 +29,6 @@ public class UserServiceTest {
 		
 		Assert.assertNotEquals(null, this.user);
 		Assert.assertEquals(this.user, users.get(0));
-	}
+	}//
 	
 }
