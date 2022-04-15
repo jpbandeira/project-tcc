@@ -17,3 +17,5 @@
   - Atrasos superiores a 30 dias tem cobrança de multa mais bloqueio de realizar empréstimos pelo mesmo período atrasado (Verificar a partir da data de vencimento do aluguel)
 
 ## Study cases (In Portuguese):
+
+
