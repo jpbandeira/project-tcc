@@ -16,24 +16,31 @@ public class Book {
 		this.rare = rare;
 		this.rent = rent;
 	}
+	
 	public UUID getUuid() {
 		return uuid;
 	}
+	
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
 	}
+	
 	public String getTitle() {
 		return title;
 	}
+	
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
 	public boolean isRare() {
 		return rare;
 	}
+	
 	public void setRare(boolean rare) {
 		this.rare = rare;
 	}
+	
 	public Rent getRent() {
 		return rent;
 	}

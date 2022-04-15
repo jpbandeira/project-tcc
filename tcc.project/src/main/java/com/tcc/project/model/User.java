@@ -25,30 +25,39 @@ public class User {
 	public UUID getUuid() {
 		return uuid;
 	}
+	
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
 	}
+	
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public TypeUser getType() {
 		return type;
 	}
+	
 	public void setType(TypeUser type) {
 		this.type = type;
 	}
+	
 	public String getEmail() {
 		return email;
 	}
+	
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 	public String getRegistration() {
 		return registration;
 	}
+	
 	public void setRegistration(String registration) {
 		this.registration = registration;
 	}	
