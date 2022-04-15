@@ -48,9 +48,14 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.evosuite.plugins</groupId>
+				<artifactId>evosuite-maven-plugin</artifactId>
+				<version>1.0.6</version>
+			</plugin>
+			<plugin>
 				<groupId>org.pitest</groupId>
 				<artifactId>pitest-maven</artifactId>
-				<version>LATEST</version>
+				<version>1.7.5</version>
 				<configuration>
 					<targetClasses>
 						<param>com.tcc.project.services*</param>
@@ -59,11 +64,6 @@
 						<param>com.tcc.project*</param>
 					</targetTests>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.pitest</groupId>
-				<artifactId>pitest-maven</artifactId>
-				<version>1.7.5</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -111,4 +111,13 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>EvoSuite</id>
+			<name>EvoSuite Repository</name>
+			<url>http://www.evosuite.org/m2</url>
+		</pluginRepository>
+	</pluginRepositories>
+
 </project>
