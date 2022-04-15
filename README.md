@@ -17,3 +17,7 @@
   - Atrasos superiores a 30 dias tem cobrança de multa mais bloqueio de realizar empréstimos pelo mesmo período atrasado (Verificar a partir da data de vencimento do aluguel)
 
 ## Study cases (In Portuguese):
+
+- Criar os testes unitários, de forma totalmente manual **(Utilizar o relatório da ferramenta pitest para analisar a cobertura de testes no final)**
+- Criar os testes unitários inicialmente aplicando a ferramenta Evolsuit para criar os casos de teste iniciais criando o restante dos casos de teste de forma manual **(Utilizar o relatório da ferramenta pitest para analisar a cobertura de testes no final)**
+- Utilizar a ferramenta pitest com o intuito de incrementar a cobertura de testes do código e identificar a qualidade dos testes escritos pela quantidade de mutantes mortos e vivos
