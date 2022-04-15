@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.tcc.project.enums.TypeUser;
 
 public class User {
+	
 	private UUID uuid;
 	private String name;
 	private TypeUser type;

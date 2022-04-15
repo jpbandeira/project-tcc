@@ -3,6 +3,7 @@ package com.tcc.project.model;
 import java.util.UUID;
 
 public class Book {
+	
 	private UUID uuid;
 	private String title;
 	private boolean rare;

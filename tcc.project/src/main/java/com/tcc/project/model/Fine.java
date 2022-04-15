@@ -3,6 +3,7 @@ package com.tcc.project.model;
 import java.util.UUID;
 
 public class Fine {
+	
 	private UUID uuid;
 	private boolean paid;
 	private User user;

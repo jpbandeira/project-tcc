@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Rent {
+	
 	private UUID uuid;
 	private Date dueDate;
 	private User user;
