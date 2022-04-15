@@ -15,3 +15,5 @@
 - Regras para aplicação de multas:
   - Ultrapassando o prazo máximo acarreta na cobrança de multa pela quantidade de dias atrasados (Verificar a partir da data de vencimento do aluguel)
   - Atrasos superiores a 30 dias tem cobrança de multa mais bloqueio de realizar empréstimos pelo mesmo período atrasado (Verificar a partir da data de vencimento do aluguel)
+
+## Study cases (In Portuguese):
