@@ -6,16 +6,23 @@ import java.util.UUID;
 import com.tcc.project.model.User;
 
 public class UserService {
-	private User user = new User();
-	private ArrayList<User> users = new ArrayList<User>();
+	public static ArrayList<User> users = new ArrayList<User>();
 	
 	public ArrayList<User> addUser(User user) {
-		this.users.add(user);
+		if (user == null) {
+			return null;
+		}
+		
+		users.add(user);
 
-		return this.users;
+		return users;
 	}
 	
 	public User find(UUID uuid) {
+		if (uuid == null) {
+			return null;
+		}
+		
 		for (User user : users) {
 			if (user.getUuid().equals(uuid)) {
 				return user;
@@ -26,14 +33,43 @@ public class UserService {
 	}
 	
 	public ArrayList<User> findAll() {
-		return this.users;
+		if (users.isEmpty()) {
+			return null;
+		}
+		
+		return users;
 	}
 	
 	public void delete(UUID uuid) {
 		User user = find(uuid);
 		
 		if(user != null) {
-			this.users.remove(user);
+			users.remove(user);
 		}
 	}
+	
+	public User update(User user) {
+		if(user == null) {
+			return null;
+		}
+		
+		User userToUpdate = find(user.getUuid());
+		
+		if(userToUpdate == null ) {
+			return null;
+		}
+		
+		this.updateUser(user, userToUpdate);
+		
+		return userToUpdate;
+	}
+	
+	private void updateUser(User newUser, User oldUser) {
+		oldUser.setUuid(newUser.getUuid());
+		oldUser.setName(newUser.getName());
+		oldUser.setEmail(newUser.getEmail());
+		oldUser.setType(newUser.getType());
+		oldUser.setRegistration(newUser.getRegistration());
+	}
+	
 }

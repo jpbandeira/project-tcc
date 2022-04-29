@@ -4,19 +4,19 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Rent {
-	
+
 	private UUID uuid;
 	private Date dueDate;
 	private User user;
-	
+	private Book book;
+
 	public Rent() {
 	}
 
-	public Rent(UUID uuid, Date dueDate, User user) {
+	public Rent(UUID uuid, Date dueDate) {
 		super();
 		this.uuid = uuid;
 		this.dueDate = dueDate;
-		this.user = user;
 	}
 
 	public UUID getUuid() {
@@ -42,4 +42,13 @@ public class Rent {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public Book getBook() {
+		return book;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
 }
