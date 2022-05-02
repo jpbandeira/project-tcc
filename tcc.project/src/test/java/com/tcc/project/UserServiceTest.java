@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tcc.project.enums.TypeUser;
-import com.tcc.project.model.Book;
 import com.tcc.project.model.User;
 import com.tcc.project.services.UserService;
 
@@ -17,8 +16,7 @@ public class UserServiceTest {
 	private UserService userService;
 
 	private User setUp() {
-		UUID uuid = UUID.randomUUID();
-		return new User(uuid, "name", TypeUser.STUDENT, "email@email.com", "1710027");
+		return new User(UUID.randomUUID(), "name", TypeUser.STUDENT, "email@email.com", "1710027", true);
 	}
 
 	@Before
@@ -27,7 +25,7 @@ public class UserServiceTest {
 	}
 
 	private void cleanList() {
-		this.userService.users.clear();
+		UserService.users.clear();
 	}
 
 	@Test
@@ -95,6 +93,29 @@ public class UserServiceTest {
 		Assert.assertNotNull(user);
 		this.cleanList();
 	}
+	
+	@Test
+	public void shouldNotFindAAuthenticatedUser() {
+		User usersetUp = setUp();
+		usersetUp.setAuthenticated(false);
+		this.userService.addUser(usersetUp);
+		
+		User user = this.userService.findLoged();
+		
+		Assert.assertNull(user);
+		this.cleanList();
+	}
+	
+	@Test
+	public void shouldFindAUserAuthenticated() {
+		this.userService.addUser(setUp());
+		
+		User user = this.userService.findLoged();
+		
+		Assert.assertNotNull(user);
+		Assert.assertTrue(user.isAuthenticated());
+		this.cleanList();
+	}
 
 	@Test
 	public void deleteAUserWithAInvalidUUID() {
@@ -152,7 +173,7 @@ public class UserServiceTest {
 		User usersetUp = setUp();
 		this.userService.addUser(usersetUp);
 
-		User userToUpdate = new User(usersetUp.getUuid(), usersetUp.getName(), TypeUser.PROFESSOR, usersetUp.getEmail(), usersetUp.getRegistration());
+		User userToUpdate = new User(usersetUp.getUuid(), usersetUp.getName(), TypeUser.PROFESSOR, usersetUp.getEmail(), usersetUp.getRegistration(), usersetUp.isAuthenticated());
 
 		User user = this.userService.update(userToUpdate);
 

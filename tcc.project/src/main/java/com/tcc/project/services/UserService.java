@@ -3,6 +3,7 @@ package com.tcc.project.services;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.tcc.project.enums.TypeUser;
 import com.tcc.project.model.User;
 
 public class UserService {
@@ -16,6 +17,16 @@ public class UserService {
 		users.add(user);
 
 		return users;
+	}
+	
+	public User findLoged() {		
+		for (User user : users) {
+			if (user.isAuthenticated()) {
+				return user;
+			}
+		}
+		
+		return null;
 	}
 	
 	public User find(UUID uuid) {

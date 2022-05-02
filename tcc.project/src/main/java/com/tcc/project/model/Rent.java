@@ -13,10 +13,10 @@ public class Rent {
 	public Rent() {
 	}
 
-	public Rent(UUID uuid, Date dueDate) {
-		super();
+	public Rent(UUID uuid, Date dueDate, Book book) {
 		this.uuid = uuid;
 		this.dueDate = dueDate;
+		this.book = book;
 	}
 
 	public UUID getUuid() {

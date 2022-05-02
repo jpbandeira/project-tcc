@@ -1,3 +1,4 @@
+
 package com.tcc.project;
 
 import java.util.ArrayList;
@@ -9,8 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tcc.project.enums.TypeUser;
+import com.tcc.project.model.Book;
 import com.tcc.project.model.Rent;
 import com.tcc.project.model.User;
+import com.tcc.project.services.BookService;
 import com.tcc.project.services.RentService;
 import com.tcc.project.services.UserService;
 
@@ -18,60 +21,126 @@ public class RentServiceTest {
 
 	private RentService rentService;
 	private UserService userService;
-
-	private User user;
-
-	private Rent setUp() {
-		this.user = new User(UUID.randomUUID(), "name", TypeUser.STUDENT, "email@email.com", "1710027");
-
-		return new Rent(UUID.randomUUID(), new Date());
-	}
+	private BookService bookService;
 
 	@Before
 	public void before() {
 		this.rentService = new RentService();
 		this.userService = new UserService();
+		this.bookService = new BookService();
+		
+		this.userService.addUser(new User(UUID.randomUUID(), "Student", TypeUser.STUDENT, "student@email.com", "1710027", true));
+		this.userService.addUser(new User(UUID.randomUUID(), "Professos", TypeUser.PROFESSOR, "professor@email.com", "1710028", false));
 	}
 
-	@Test
-	public void rentShouldNotBeAdded() {
-		ArrayList<Rent> rents = this.rentService.addRent(null, this.user);
+	private Rent setUp() {		
+		return new Rent(UUID.randomUUID(), new Date(), new Book(UUID.randomUUID(), "title", false));
+	}
+
+	private void cleanList() {
+		RentService.rents.clear();
+		UserService.users.clear();
+		BookService.books.clear();
+	}
+	
+	@Test	
+	public void rentShouldNotBeAddedWithoutUserRegistered() {
+		this.cleanList();
+		ArrayList<Rent> rents = this.rentService.addRent(new Rent());
 		
 		Assert.assertNull(rents);
 	}
 	
 	@Test
-	public void addRentWithInvalidUser() {
-		Rent rentsetUp = setUp();
-		rentsetUp.setUser(null);
-		
-		ArrayList<Rent> rents = this.rentService.addRent(rentsetUp, null);
+	public void rentShouldNotBeAddedWithNull() {
+		ArrayList<Rent> rents = this.rentService.addRent(null);
 		
 		Assert.assertNull(rents);
+		this.cleanList();
 	}
 	
 	@Test
-	public void addRentWithUnregisteredUser() {
-		Rent rentsetUp = setUp();
+	public void rentShouldNotBeAddedWithARareBook() {
+		Rent rentSetup = this.setUp();
+		rentSetup.getBook().setRare(true);
 		
-		ArrayList<Rent> rents = this.rentService.addRent(rentsetUp, this.user);
+		ArrayList<Rent> rents = this.rentService.addRent(rentSetup);
 		
 		Assert.assertNull(rents);
+		this.cleanList();
 	}
 	
+	@Test
+	public void rentShouldNotBeAddedWhenStudentUserGetsAllBooksInLimit() {
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		ArrayList<Rent> rents = this.rentService.addRent(setUp());
+
+		Assert.assertNull(rents);
+		this.cleanList();		
+	}
+	
+	@Test
+	public void rentShouldNotBeAddedWhenProfessorUserGetsAllBooksInLimit() {
+		for (User user : this.userService.findAll()) {
+			if(user.getType().equals(TypeUser.STUDENT)) {
+				user.setAuthenticated(false);
+			} else {
+				user.setAuthenticated(true);
+			}
+		}		
+		
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		ArrayList<Rent> rents = this.rentService.addRent(setUp());
+
+		Assert.assertNull(rents);
+		this.cleanList();		
+	}
+	
+
 	@Test
 	public void rentShouldBeAdded() {
-		Rent rentsetUp = setUp();
-		userService.addUser(this.user);
-
-		ArrayList<Rent> rents = this.rentService.addRent(rentsetUp, this.user);
+		ArrayList<Rent> rents = this.rentService.addRent(setUp());
 
 		Assert.assertNotNull(rents);
+		this.cleanList();
 	}
+	
+	@Test
+	public void shouldNotFindAllByUserWithoutAUser() {
+		this.cleanList();
+		ArrayList<Rent> rents = this.rentService.findAllByUser();
 
+		Assert.assertNull(rents);		
+	}
+	
+	@Test
+	public void shouldNotFindAllByUserWithoutRentsRegistered() {
+		ArrayList<Rent> rents = this.rentService.findAllByUser();
 
-	/*
-	 * @Test public void rentShouldBeDelete() { this.rentService }
-	 */
+		Assert.assertNull(rents);
+		this.cleanList();
+	}
+	
+	@Test
+	public void shouldFindAllByUser() {
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		
+		ArrayList<Rent> rents = this.rentService.findAllByUser();
+
+		Assert.assertNotNull(rents);
+		this.cleanList();
+	}
 
 }
