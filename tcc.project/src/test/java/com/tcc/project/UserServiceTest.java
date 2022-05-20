@@ -173,7 +173,7 @@ public class UserServiceTest {
 		User usersetUp = setUp();
 		this.userService.addUser(usersetUp);
 
-		User userToUpdate = new User(usersetUp.getUuid(), usersetUp.getName(), TypeUser.PROFESSOR, usersetUp.getEmail(), usersetUp.getRegistration(), usersetUp.isAuthenticated());
+		User userToUpdate = new User(usersetUp.getUuid(), "Name User 2", TypeUser.PROFESSOR, "user2@gmail.com", "1710039", true);
 
 		User user = this.userService.update(userToUpdate);
 

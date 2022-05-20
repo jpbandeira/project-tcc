@@ -131,9 +131,25 @@ public class RentServiceTest {
 	}
 
 	@Test
-	public void rentShouldBeAdded() {
+	public void rentShouldBeAddedWithStudentUser() {
 		this.makeUserBeAuthenticated(TypeUser.STUDENT);
 
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
+		ArrayList<Rent> rents = this.rentService.addRent(setUp());
+
+		Assert.assertNotNull(rents);
+		this.cleanList();
+	}
+	
+	@Test
+	public void rentShouldBeAddedWithProfessorUser() {
+		this.makeUserBeAuthenticated(TypeUser.PROFESSOR);
+
+		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp());
 		this.rentService.addRent(setUp());
 		this.rentService.addRent(setUp());
 		this.rentService.addRent(setUp());
