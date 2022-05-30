@@ -146,11 +146,12 @@ public class BookServiceTest {
 		Book bookSetUp = setUp();
 		this.bookService.addBook(bookSetUp);
 
-		Book bookToUpdate = new Book(bookSetUp.getUuid(), "Title 2", true);
+		Book bookToUpdate = new Book(bookSetUp.getUuid(), "Title 2", false);
 
 		Book updated = this.bookService.update(bookToUpdate);
 
 		Assert.assertEquals(bookToUpdate.getTitle(), updated.getTitle());
+		Assert.assertEquals(bookToUpdate.isRare(), updated.isRare());
 		Assert.assertNotNull(updated);
 		this.cleanList();
 	}

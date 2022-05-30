@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/project-tcc.iml" filepath="$PROJECT_DIR$/.idea/project-tcc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tcc.project/tcc.project.iml" filepath="$PROJECT_DIR$/tcc.project/tcc.project.iml" />
+    </modules>
+  </component>
+</project>

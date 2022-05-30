@@ -173,11 +173,16 @@ public class UserServiceTest {
 		User usersetUp = setUp();
 		this.userService.addUser(usersetUp);
 
-		User userToUpdate = new User(usersetUp.getUuid(), "Name User 2", TypeUser.PROFESSOR, "user2@gmail.com", "1710039", true);
+		User userToUpdate = new User(usersetUp.getUuid(), "Name User 2", TypeUser.PROFESSOR, "user2@gmail.com", "1710039", false);
 
 		User user = this.userService.update(userToUpdate);
 
+		Assert.assertNotNull(user.getUuid());
+		Assert.assertEquals(userToUpdate.getName(), user.getName());
 		Assert.assertEquals(userToUpdate.getType(), user.getType());
+		Assert.assertEquals(userToUpdate.getEmail(), user.getEmail());
+		Assert.assertEquals(userToUpdate.getRegistration(), user.getRegistration());
+		Assert.assertEquals(userToUpdate.isAuthenticated(), user.isAuthenticated());
 		Assert.assertNotNull(user);
 		this.cleanList();
 	}

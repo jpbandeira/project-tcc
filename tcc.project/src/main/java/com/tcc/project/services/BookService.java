@@ -72,7 +72,6 @@ public class BookService {
 	}
 	
 	public void updateBook(Book newBook, Book oldBook) {
-		oldBook.setUuid(newBook.getUuid());
 		oldBook.setTitle(newBook.getTitle());
 		oldBook.setRare(newBook.isRare());
 	}

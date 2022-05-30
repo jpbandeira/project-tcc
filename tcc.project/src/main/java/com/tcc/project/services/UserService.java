@@ -76,11 +76,11 @@ public class UserService {
 	}
 	
 	private void updateUser(User newUser, User oldUser) {
-		oldUser.setUuid(newUser.getUuid());
 		oldUser.setName(newUser.getName());
 		oldUser.setEmail(newUser.getEmail());
 		oldUser.setType(newUser.getType());
 		oldUser.setRegistration(newUser.getRegistration());
+		oldUser.setAuthenticated(newUser.isAuthenticated());
 	}
 	
 }

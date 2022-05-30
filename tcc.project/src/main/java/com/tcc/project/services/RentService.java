@@ -100,13 +100,13 @@ public class RentService {
 
 			switch (rent.getUser().getType()) {
 			case STUDENT:
-				if (this.findAllByUser().size() >= 5) {
+				if (this.findAllByUser().size() == 5) {
 					System.out.println("User with type " + TypeUser.STUDENT + " gets all books that he can");
 					return false;
 				}
 				break;
 			case PROFESSOR:
-				if (this.findAllByUser().size() >= 7) {
+				if (this.findAllByUser().size() == 7) {
 					System.out.println("User with type " + TypeUser.PROFESSOR + " gets all books that he can");
 					return false;
 				}
