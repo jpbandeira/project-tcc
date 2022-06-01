@@ -18,17 +18,7 @@ public class UserService {
 
 		return users;
 	}
-	
-	public User findLoged() {		
-		for (User user : users) {
-			if (user.isAuthenticated()) {
-				return user;
-			}
-		}
-		
-		return null;
-	}
-	
+
 	public User find(UUID uuid) {
 		if (uuid == null) {
 			return null;
@@ -80,7 +70,6 @@ public class UserService {
 		oldUser.setEmail(newUser.getEmail());
 		oldUser.setType(newUser.getType());
 		oldUser.setRegistration(newUser.getRegistration());
-		oldUser.setAuthenticated(newUser.isAuthenticated());
 	}
 	
 }

@@ -16,7 +16,7 @@ public class UserServiceTest {
 	private UserService userService;
 
 	private User setUp() {
-		return new User(UUID.randomUUID(), "name", TypeUser.STUDENT, "email@email.com", "1710027", true);
+		return new User(UUID.randomUUID(), "name", TypeUser.STUDENT, "email@email.com", "1710027");
 	}
 
 	@Before
@@ -94,28 +94,6 @@ public class UserServiceTest {
 		this.cleanList();
 	}
 	
-	@Test
-	public void shouldNotFindAAuthenticatedUser() {
-		User usersetUp = setUp();
-		usersetUp.setAuthenticated(false);
-		this.userService.addUser(usersetUp);
-		
-		User user = this.userService.findLoged();
-		
-		Assert.assertNull(user);
-		this.cleanList();
-	}
-	
-	@Test
-	public void shouldFindAUserAuthenticated() {
-		this.userService.addUser(setUp());
-		
-		User user = this.userService.findLoged();
-		
-		Assert.assertNotNull(user);
-		Assert.assertTrue(user.isAuthenticated());
-		this.cleanList();
-	}
 
 	@Test
 	public void deleteAUserWithAInvalidUUID() {
@@ -173,7 +151,7 @@ public class UserServiceTest {
 		User usersetUp = setUp();
 		this.userService.addUser(usersetUp);
 
-		User userToUpdate = new User(usersetUp.getUuid(), "Name User 2", TypeUser.PROFESSOR, "user2@gmail.com", "1710039", false);
+		User userToUpdate = new User(usersetUp.getUuid(), "Name User 2", TypeUser.PROFESSOR, "user2@gmail.com", "1710039");
 
 		User user = this.userService.update(userToUpdate);
 
@@ -182,7 +160,6 @@ public class UserServiceTest {
 		Assert.assertEquals(userToUpdate.getType(), user.getType());
 		Assert.assertEquals(userToUpdate.getEmail(), user.getEmail());
 		Assert.assertEquals(userToUpdate.getRegistration(), user.getRegistration());
-		Assert.assertEquals(userToUpdate.isAuthenticated(), user.isAuthenticated());
 		Assert.assertNotNull(user);
 		this.cleanList();
 	}

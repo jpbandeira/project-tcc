@@ -52,9 +52,7 @@ public class RentService {
 		return findedRents;
 	}
 
-	public Rent addRent(Rent rent) {
-		User user = this.userService.findLoged();
-
+	public Rent addRent(Rent rent, User user) {
 		if (user == null) {
 			return null;
 		}
@@ -82,6 +80,25 @@ public class RentService {
 		if (this.checkIfTheBookWasRentedByUser(rent.getUser(), rent.getBook())) {
 			System.out.println("The book " + rent.getBook().getTitle() + " was already rented by " + rent.getUser().getName());
 			return false;
+		}
+
+		ArrayList<Rent> books = this.findAllByUser(rent.getUser());
+
+		if (books != null) {
+			switch (rent.getUser().getType()) {
+				case STUDENT:
+					if (books.size() == 5) {
+						System.out.println("User with type " + TypeUser.STUDENT + " gets all books that he can");
+						return false;
+					}
+					break;
+				case PROFESSOR:
+					if (books.size() == 7) {
+						System.out.println("User with type " + TypeUser.PROFESSOR + " gets all books that he can");
+						return false;
+					}
+					break;
+			}
 		}
 
 		return true;
