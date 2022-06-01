@@ -203,4 +203,90 @@ public class RentServiceTest {
 
 		this.cleanList();
 	}
+
+	@Test
+	public void shouldNotDeleteARentWithANullUUID() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		this.rentService.delete(null);
+
+		Assert.assertNotNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldNotDeleteARentWithAnInvalidUUID() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		UUID uuid = UUID.randomUUID();
+		this.rentService.delete(uuid);
+
+		Assert.assertNotNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldDeleteARent() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		this.rentService.delete(rent1.getUuid());
+
+		Assert.assertNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldNotReturnABookWithANullRent() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		this.rentService.returnABook(null);
+
+		Assert.assertNotNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldNotReturnARentWithAnInvalidUUID() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		Rent invalidRent = setUp();
+		this.rentService.returnABook(invalidRent);
+
+		Assert.assertNotNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldReturnARent() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		this.rentService.returnABook(rent1);
+
+		Assert.assertNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
 }

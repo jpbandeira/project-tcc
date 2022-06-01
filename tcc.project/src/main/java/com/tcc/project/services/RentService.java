@@ -13,9 +13,6 @@ public class RentService {
 
 	public static ArrayList<Rent> rents = new ArrayList<>();
 
-	private UserService userService = new UserService();
-	private BookService bookService = new BookService();
-
 	public Rent find(UUID uuid) {
 		if (uuid == null) {
 			return null;
@@ -71,6 +68,18 @@ public class RentService {
 		return rent;
 	}
 
+	public void delete(UUID uuid) {
+		Rent rent = new Rent();
+
+		if (uuid != null) {
+			rent = this.find(uuid);
+		}
+
+		if (rent != null) {
+			rents.remove(rent);
+		}
+	}
+
 	private Boolean checkRentsByUser(Rent rent) {
 		if (rent.getBook().isRare()) {
 			System.out.println("Cannot rent a rare book!");
@@ -117,4 +126,16 @@ public class RentService {
 
 		return false;
 	}
+
+	 public void returnABook(Rent rent) {
+		Rent findedRent = null;
+
+		if (rent != null) {
+			findedRent = this.find(rent.getUuid());
+		}
+
+		if (findedRent != null) {
+			this.delete(rent.getUuid());
+		}
+	 }
 }
