@@ -10,11 +10,12 @@ public class Fine {
 		
 	public Fine() {}
 
-	public Fine(UUID uuid, boolean paid, User user) {
-		super();
-		this.uuid = uuid;
-		this.paid = paid;
+	public Fine(User user) {
 		this.user = user;
+	}
+
+	public Fine(Fine fine) {
+		this.user = fine.getUser();
 	}
 
 	public UUID getUuid() {

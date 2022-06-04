@@ -11,19 +11,17 @@ public class User {
 	private TypeUser type;
 	private String email;
 	private String registration;
-	private Boolean authenticated;
 
 	public User() {
 	}
 
-	public User(UUID uuid, String name, TypeUser type, String email, String registration, Boolean authenticated) {
+	public User(UUID uuid, String name, TypeUser type, String email, String registration) {
 		super();
 		this.uuid = uuid;
 		this.name = name;
 		this.type = type;
 		this.email = email;
 		this.registration = registration;
-		this.authenticated = authenticated;
 	}
 
 	public UUID getUuid() {
@@ -64,13 +62,5 @@ public class User {
 
 	public void setRegistration(String registration) {
 		this.registration = registration;
-	}
-
-	public Boolean isAuthenticated() {
-		return authenticated;
-	}
-
-	public void setAuthenticated(Boolean authenticated) {
-		this.authenticated = authenticated;
 	}
 }

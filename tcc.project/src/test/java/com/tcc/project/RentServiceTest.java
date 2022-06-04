@@ -23,16 +23,19 @@ public class RentServiceTest {
 	private UserService userService;
 	private BookService bookService;
 
+	private User student;
+	private User professor;
+
 	@Before
 	public void before() {
 		this.rentService = new RentService();
 		this.userService = new UserService();
 		this.bookService = new BookService();
 
-		this.userService.addUser(
-				new User(UUID.randomUUID(), "Student", TypeUser.STUDENT, "student@email.com", "1710027", false));
-		this.userService.addUser(
-				new User(UUID.randomUUID(), "Professos", TypeUser.PROFESSOR, "professor@email.com", "1710028", false));
+		this.student = new User(UUID.randomUUID(), "Student", TypeUser.STUDENT, "student@email.com", "1710027");
+		this.professor = new User(UUID.randomUUID(), "Professos", TypeUser.PROFESSOR, "professor@email.com", "1710028");
+		this.userService.addUser(this.student);
+		this.userService.addUser(this.professor);
 	}
 
 	private Rent setUp() {
@@ -45,236 +48,245 @@ public class RentServiceTest {
 		BookService.books.clear();
 	}
 
-	private void makeUserBeAuthenticated(TypeUser type) {
-		for (User user : this.userService.findAll()) {
-			if (user.getType().equals(type)) {
-				user.setAuthenticated(true);
-			}
-		}
-	}
-
 	@Test
-	public void rentShouldNotBeAddedWithoutUserRegistered() {
+	public void rentShouldNotBeAddedWithNullUser() {
 		this.cleanList();
-		ArrayList<Rent> rents = this.rentService.addRent(new Rent());
 
-		Assert.assertNull(rents);
+		Rent rent = this.rentService.addRent(new Rent(), null);
+		Assert.assertNull(rent);
 	}
 
 	@Test
 	public void rentShouldNotBeAddedWithNull() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
+		Rent rent = this.rentService.addRent(null, this.student);
+		Assert.assertNull(rent);
 
-		ArrayList<Rent> rents = this.rentService.addRent(null);
-
-		Assert.assertNull(rents);
-		this.cleanList();
-	}
-
-	@Test
-	public void rentShouldNotBeAddedWithARareBook() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
-
-		Rent rentSetup = this.setUp();
-		rentSetup.getBook().setRare(true);
-
-		ArrayList<Rent> rents = this.rentService.addRent(rentSetup);
-
-		Assert.assertNull(rents);
-		this.cleanList();
-	}
-
-	@Test
-	public void rentShouldNotBeAddedWhenAUserAlreadyDidThis() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
-
-		Rent rent1 = setUp();
-		this.rentService.addRent(rent1);
-		Rent rent2 = setUp();
-		rent2.setBook(rent1.getBook());
-		ArrayList<Rent> rents = this.rentService.addRent(rent2);
-
-		Assert.assertNull(rents);
-		this.cleanList();
-	}
-
-	@Test
-	public void rentShouldNotBeAddedWhenStudentUserGetsAllBooksInLimit() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
-
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		ArrayList<Rent> rents = this.rentService.addRent(setUp());
-
-		Assert.assertNull(rents);
-		this.cleanList();
-	}
-
-	@Test
-	public void rentShouldNotBeAddedWhenProfessorUserGetsAllBooksInLimit() {
-		this.makeUserBeAuthenticated(TypeUser.PROFESSOR);
-
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		ArrayList<Rent> rents = this.rentService.addRent(setUp());
-
-		Assert.assertNull(rents);
 		this.cleanList();
 	}
 
 	@Test
 	public void rentShouldBeAddedWithStudentUser() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
 
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		ArrayList<Rent> rents = this.rentService.addRent(setUp());
+		Rent rent= this.rentService.addRent(setUp(), this.student);
+		Assert.assertNotNull(rent);
+		Assert.assertNotNull(rent.getUser());
 
-		Assert.assertNotNull(rents);
 		this.cleanList();
 	}
-	
+
 	@Test
 	public void rentShouldBeAddedWithProfessorUser() {
-		this.makeUserBeAuthenticated(TypeUser.PROFESSOR);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
 
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		ArrayList<Rent> rents = this.rentService.addRent(setUp());
+		Rent rent = this.rentService.addRent(setUp(), this.professor);
+		Assert.assertNotNull(rent);
+		Assert.assertNotNull(rent.getUser());
 
-		Assert.assertNotNull(rents);
 		this.cleanList();
 	}
 
 	@Test
-	public void shouldNotFindAllByUserWithoutAUser() {
-		this.cleanList();
-		ArrayList<Rent> rents = this.rentService.findAllByUser();
+	public void rentShouldNotBeAddedWithARareBook() {
+		Rent rentSetup = this.setUp();
+		rentSetup.getBook().setRare(true);
 
-		Assert.assertNull(rents);
-	}
+		Rent rent = this.rentService.addRent(rentSetup, this.student);
+		Assert.assertNull(rent);
 
-	@Test
-	public void shouldNotFindAllByUserWithoutRentsRegistered() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
-
-		ArrayList<Rent> rents = this.rentService.findAllByUser();
-
-		Assert.assertNull(rents);
 		this.cleanList();
 	}
 
 	@Test
-	public void shouldFindAllByUser() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
+	public void rentShouldNotBeAddedWhenAUserAlreadyDidThis() {
+		Rent rent1 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		Rent rent2 = setUp();
+		rent2.setBook(rent1.getBook());
+		Rent rent = this.rentService.addRent(rent2, this.student);
 
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
+		Assert.assertNull(rent);
+		this.cleanList();
+	}
 
-		ArrayList<Rent> rents = this.rentService.findAllByUser();
+	@Test
+	public void rentShouldNotBeAddedWhenStudentUserGetsAllBooksInLimit() {
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
+		Rent rent = this.rentService.addRent(setUp(), this.student);
 
-		Assert.assertNotNull(rents);
+		Assert.assertNull(rent);
+		this.cleanList();
+	}
+
+	@Test
+	public void rentShouldNotBeAddedWhenProfessorUserGetsAllBooksInLimit() {
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		this.rentService.addRent(setUp(), this.professor);
+		Rent rent = this.rentService.addRent(setUp(), this.professor);
+
+		Assert.assertNull(rent);
 		this.cleanList();
 	}
 
 	@Test
 	public void shouldNotFindARentWithANullUUID() {
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
-
 		Rent rent = this.rentService.find(null);
-
 		Assert.assertNull(rent);
+
 		this.cleanList();
 	}
 
 	@Test
 	public void shouldNotFindARentWithAInvalidUUID() {
-		this.rentService.addRent(setUp());
-		this.rentService.addRent(setUp());
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
 
 		Rent rent = this.rentService.find(UUID.randomUUID());
-
 		Assert.assertNull(rent);
+
 		this.cleanList();
 	}
 
 	@Test
 	public void shouldFindARent() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
-
 		Rent rent = setUp();
-		this.rentService.addRent(rent);
-		this.rentService.addRent(setUp());
+		this.rentService.addRent(rent, this.student);
+		this.rentService.addRent(setUp(), this.student);
 
 		Rent value = this.rentService.find(rent.getUuid());
-
 		Assert.assertNotNull(value);
+
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldNotFindAllByUserWithNullUser() {
+		this.cleanList();
+
+		ArrayList<Rent> rents = this.rentService.findAllByUser(null);
+		Assert.assertNull(rents);
+	}
+
+	@Test
+	public void shouldNotFindAllByUserWithoutRents() {
+		ArrayList<Rent> rents = this.rentService.findAllByUser(this.student);
+		Assert.assertNull(rents);
+
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldFindAllByUser() {
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
+		this.rentService.addRent(setUp(), this.student);
+
+		ArrayList<Rent> rents = this.rentService.findAllByUser(this.student);
+		Assert.assertNotNull(rents);
+
 		this.cleanList();
 	}
 
 	@Test
 	public void shouldNotDeleteARentWithANullUUID() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
-
 		Rent rent1 = setUp();
 		Rent rent2 = setUp();
-		this.rentService.addRent(rent1);
-		this.rentService.addRent(rent2);
-		
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
 		this.rentService.delete(null);
-		
+
 		Assert.assertNotNull(this.rentService.find(rent1.getUuid()));
 		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
 		this.cleanList();
 	}
-	
+
 	@Test
 	public void shouldNotDeleteARentWithAnInvalidUUID() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
-
 		Rent rent1 = setUp();
 		Rent rent2 = setUp();
-		this.rentService.addRent(rent1);
-		this.rentService.addRent(rent2);
-		
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
 		UUID uuid = UUID.randomUUID();
 		this.rentService.delete(uuid);
-		
+
 		Assert.assertNotNull(this.rentService.find(rent1.getUuid()));
 		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
 		this.cleanList();
 	}
-	
-	@Test
-	public void shouldNotDeleteARent() {
-		this.makeUserBeAuthenticated(TypeUser.STUDENT);
 
+	@Test
+	public void shouldDeleteARent() {
 		Rent rent1 = setUp();
 		Rent rent2 = setUp();
-		this.rentService.addRent(rent1);
-		this.rentService.addRent(rent2);
-		
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
 		this.rentService.delete(rent1.getUuid());
-		
+
 		Assert.assertNull(this.rentService.find(rent1.getUuid()));
 		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
 		this.cleanList();
 	}
 
+	@Test
+	public void shouldNotReturnABookWithANullRent() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		this.rentService.returnABook(null);
+
+		Assert.assertNotNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldNotReturnARentWithAnInvalidUUID() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		Rent invalidRent = setUp();
+		this.rentService.returnABook(invalidRent);
+
+		Assert.assertNotNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
+
+	@Test
+	public void shouldReturnARent() {
+		Rent rent1 = setUp();
+		Rent rent2 = setUp();
+		this.rentService.addRent(rent1, this.student);
+		this.rentService.addRent(rent2, this.student);
+
+		this.rentService.returnABook(rent1);
+
+		Assert.assertNull(this.rentService.find(rent1.getUuid()));
+		Assert.assertNotNull(this.rentService.find(rent2.getUuid()));
+		this.cleanList();
+	}
 }
