@@ -2,15 +2,18 @@
 package com.tcc.project.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.UUID;
 
 import com.tcc.project.enums.TypeUser;
 import com.tcc.project.model.Book;
+import com.tcc.project.model.Fine;
 import com.tcc.project.model.Rent;
 import com.tcc.project.model.User;
 
 public class RentService {
 
+	private FineService fineService = new FineService();
 	public static ArrayList<Rent> rents = new ArrayList<>();
 
 	public Rent find(UUID uuid) {
@@ -59,6 +62,19 @@ public class RentService {
 		}
 		rent.setUser(user);
 
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(rent.getRentDate());
+
+		switch (rent.getUser().getType()){
+			case STUDENT:
+				calendar.add(Calendar.DAY_OF_MONTH, 15);
+				break;
+			case PROFESSOR:
+				calendar.add(Calendar.DAY_OF_MONTH, 30);
+				break;
+		}
+		rent.setDueDate(calendar.getTime());
+
 		if (!this.checkRentsByUser(rent)) {
 			return null;
 		}
@@ -94,17 +110,39 @@ public class RentService {
 		ArrayList<Rent> books = this.findAllByUser(rent.getUser());
 
 		if (books != null) {
+			Calendar calendar = Calendar.getInstance();
+			int dueDateDay = 0;
+			int today = 0;
+
 			switch (rent.getUser().getType()) {
 				case STUDENT:
 					if (books.size() == 5) {
 						System.out.println("User with type " + TypeUser.STUDENT + " gets all books that he can");
 						return false;
 					}
+
+					for (Rent value: rents) {
+						calendar.setTime(value.getDueDate());
+						dueDateDay = calendar.get(Calendar.DAY_OF_MONTH);
+						today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+						if (dueDateDay < today) {
+							this.fineService.addFine(new Fine(value.getUser()));
+						}
+					}
 					break;
 				case PROFESSOR:
 					if (books.size() == 7) {
 						System.out.println("User with type " + TypeUser.PROFESSOR + " gets all books that he can");
 						return false;
+					}
+
+					for (Rent value: rents) {
+						calendar.setTime(value.getDueDate());
+						dueDateDay = calendar.get(Calendar.DAY_OF_MONTH);
+						today = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+						if (dueDateDay < today) {
+							this.fineService.addFine(new Fine(value.getUser()));
+						}
 					}
 					break;
 			}

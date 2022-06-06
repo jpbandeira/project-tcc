@@ -6,6 +6,7 @@ import java.util.UUID;
 public class Rent {
 
 	private UUID uuid;
+	private Date rentDate;
 	private Date dueDate;
 	private User user;
 	private Book book;
@@ -13,9 +14,9 @@ public class Rent {
 	public Rent() {
 	}
 
-	public Rent(UUID uuid, Date dueDate, Book book) {
-		this.uuid = uuid;
-		this.dueDate = dueDate;
+	public Rent(Book book) {
+		this.uuid = UUID.randomUUID();
+		this.rentDate = new Date();
 		this.book = book;
 	}
 
@@ -25,6 +26,14 @@ public class Rent {
 
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
+	}
+
+	public Date getRentDate() {
+		return rentDate;
+	}
+
+	public void setRentDate(Date rentDate) {
+		this.rentDate = rentDate;
 	}
 
 	public Date getDueDate() {
